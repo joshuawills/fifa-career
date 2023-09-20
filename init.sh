@@ -1,7 +1,6 @@
 #!/bin/sh
 
-set +x
-
+set -x
 if ! [ -d ~/.fifacareer ] 
 then
 
