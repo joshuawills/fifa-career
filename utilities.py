@@ -29,3 +29,30 @@ def print_careers():
 			print("\n\t".join(data))
 
 	return len(careers)
+
+def get_career_directory():
+	x = -1
+	with open(active_career_file, "r") as f:
+		x = f.readlines()[0].strip()
+	return os.path.join(base_directory, f"career{x}")
+
+def get_competitions():
+	with open(os.path.join(get_career_directory(), "competitions"), "r") as f:
+		current_competitions = f.readlines()
+
+	return current_competitions
+
+def get_accomplishments():
+	with open(os.path.join(get_career_directory(), "accomplishements"), "r") as f:
+		accomplishments = f.readlines()
+
+	return accomplishments
+
+def get_players():
+  career_directory = os.path.join(get_career_directory(), "players")
+  return [f for f in os.listdir(career_directory) if os.path.isfile(os.path.join(career_directory, f))] 
+
+def get_seasons():
+	with open(os.path.join(get_career_directory(), "seasons"), "r") as f:
+		current_seasons = f.readlines()
+	return current_seasons

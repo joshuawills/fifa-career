@@ -2,7 +2,7 @@
 
 import time 
 import sys, os, glob, subprocess, re
-from utilities import clear, base_directory, active_career_file
+from utilities import clear, base_directory, active_career_file, get_career_directory, get_competitions, get_players, get_accomplishments, get_seasons
 
 def add_player():
   clear()
@@ -22,8 +22,7 @@ def add_player():
   with open(active_career_file, "r") as f:
     x = f.readlines()[0].strip()
 
-  career_directory = os.path.join(base_directory, f"career{x}")
-  career_directory = os.path.join(career_directory, "players")
+  career_directory = os.path.join(get_career_directory(), "players")
   answer = input("\nAre you sure you want to add this player? (Y/N) ")
 
   if answer.strip().upper() != "Y":
@@ -52,16 +51,9 @@ def change_player_status():
   print("Welcome to the change player status")
   print("First select, the player whose status you want to change: \n\n")
 
-  x = -1
-  with open(active_career_file, "r") as f:
-    x = f.readlines()[0].strip()
-  
-  career_directory = os.path.join(base_directory, f"career{x}")
-  career_directory = os.path.join(career_directory, "players")
-  
-
-  files = [f for f in os.listdir(career_directory) if os.path.isfile(os.path.join(career_directory, f))] 
-  print(', '.join(files))
+  career_directory = os.path.join(get_career_directory(), "players")
+  players = get_players()
+  print(', '.join(players))
 
   answer = input("Type the name of one of the above players? ")
   while  answer.strip() not in files:
@@ -69,18 +61,14 @@ def change_player_status():
     answer = input("Type the name of one of the above players? ")
 
   options = ["WAGE", "STATUS (active|retired|sold)", "Return to previous menu"]
-
-  
   string = "Select an option: \n\n"
   for i, x in enumerate(options):
       string += f"\t[{i+1}]: {x}\n"
-  string += "\n\t"
+  string += "\n"
 
   while True:
     x = int(input(string))
-
     if x == 1:
-      
       new_wage = input("\nWhat is the new wage? ")
       current_state = []
       with open(os.path.join(career_directory, answer.upper()), "r") as f:
@@ -112,33 +100,34 @@ def change_player_status():
       return 
 
 
-
-
-  return 
-
 def add_game():
   clear()
   print("Welcome to the add game section\n")
+
+  seasons = ", ".join([x.strip() for x in get_seasons()])
+  season_selection = input(f"Select seasons: {seasons}\n\t-> ")
+
+  competition = ", ".join([x.strip() for x in get_competitions()])
+  competition_selection = input(f"Select competition: {competition}\n\t-> ")
+
+  opponent = input("Select opponent:\n\t-> ")
+  home_or_away = input("H or A:\n\t-> ")
+
+
+  
 
 def add_accomplishment():
   clear()
   print("Welcome to the add accomplishements status\n")
   print("Here are all your current accomplishments registered\n")
-  x = -1
-  with open(active_career_file, "r") as f:
-    x = f.readlines()[0].strip()
-  career_directory = os.path.join(base_directory, f"career{x}")
-
-  current_accomplishments = []
-  with open(os.path.join(career_directory, "accomplishments"), "r") as f:
-    current_accomplishments = f.readlines()
-    print("".join(current_accomplishments))
+  current_accomplishments = get_accomplishments()
+  print("".join(current_accomplishments))
 
   while True:
     x = input("What is the new accomplishement you want to register? (sesason:trophy) (EXIT to leave) ")
 
     if x.upper() == "EXIT":
-      with open(os.path.join(career_directory, "accomplishments"), "w") as f:
+      with open(os.path.join(get_career_directory(), "accomplishments"), "w") as f:
         for x in current_accomplishments:
           f.write(x)
       return
@@ -150,22 +139,16 @@ def add_season():
   clear()
   print("Welcome to the add seasons status\n")
   print("Here are all your current seasons registered:")
-  x = -1
-  with open(active_career_file, "r") as f:
-    x = f.readlines()[0].strip()
-  career_directory = os.path.join(base_directory, f"career{x}")
 
-  current_seasons = []
-  with open(os.path.join(career_directory, "seasons"), "r") as f:
-    current_seasons = f.readlines()
-    print("".join(current_seasons))
+  current_seasons = get_seasons()
+  print("".join(current_seasons))
 
   while True:
     x = input("What is the new season you want to register? (EXIT to leave) ")
 
     if x.upper() == "EXIT":
 
-      with open(os.path.join(career_directory, "seasons"), "w") as f:
+      with open(os.path.join(get_career_directory(), "seasons"), "w") as f:
         for x in current_seasons:
           f.write(x)
 
@@ -177,25 +160,16 @@ def add_competition():
 
   clear()
   print("Welcome to the add competitions status\n")
-
   print("Here are all your current competitions registered:")
-
-  x = -1
-  with open(active_career_file, "r") as f:
-    x = f.readlines()[0].strip()
-  career_directory = os.path.join(base_directory, f"career{x}")
-
-  current_competitions = []
-  with open(os.path.join(career_directory, "competitions"), "r") as f:
-    current_competitions = f.readlines()
-    print("".join(current_competitions))
+  current_competitions = get_competitions()
+  print("".join(current_competitions))
 
   while True:
     x = input("What is the new competition you want to register? (EXIT to leave) ")
 
     if x.upper() == "EXIT":
 
-      with open(os.path.join(career_directory, "competitions"), "w") as f:
+      with open(os.path.join(get_career_directory(), "competitions"), "w") as f:
         for x in current_competitions:
           f.write(x)
 
