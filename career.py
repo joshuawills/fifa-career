@@ -3,7 +3,7 @@
 import sys, os, glob, subprocess, re
 
 from utilities import clear, num_active_careers, print_careers, base_directory, count_file, active_career_file
-from edit_player import add_accomplishment, add_game, add_player, add_season, change_player_status
+from edit_player import add_accomplishment, add_game, add_player, add_season, change_player_status, add_competition
 
 def create_new_career():
 
@@ -12,6 +12,7 @@ def create_new_career():
     name_career = input("\tWhat do you want the name of your career to be? ")
     club_career = input("\tWhat club have you started out as? ")
     league_career = input("\tWhat league are you playing in? ")
+    league_season = input("\tWhat is your starting league season e.g. 21/22? ")
     manager_name = input("\tWhat is your manager name? ")
 
     with open(count_file, "r") as f:
@@ -20,7 +21,8 @@ def create_new_career():
     career_directory = os.path.join(base_directory, f"career{x}")
     try:
         subprocess.run(["mkdir", career_directory], check=True)
-        subprocess.run(["mkdir", os.path.join(career_directory, "players")], check=True)
+        players_directory = os.path.join(career_directory, "players")
+        subprocess.run(["mkdir", players_directory], check=True)
         subprocess.run(["touch", os.path.join(career_directory, "keyInfo")], check=True)
 
         with open(count_file, "w") as f:
@@ -31,7 +33,16 @@ def create_new_career():
             f.write(f"CAREER_NAME: {name_career.strip()}\n")
             f.write(f"CLUB_NAME: {club_career.strip()}\n")
             f.write(f"LEAGUE_NAME: {league_career.strip()}\n")
-            f.write(f"MANAGEER_NAME: {manager_name.strip()}\n")
+            f.write(f"MANAGER_NAME: {manager_name.strip()}\n")
+
+        with open(os.path.join(career_directory, "competitions"), "w") as f:
+            f.write(f"{league_career.strip()}\n")
+
+        with open(os.path.join(career_directory, "seasons"), "w") as f:
+            f.write(f"{league_season.strip()}\n")
+
+        with open(os.path.join(career_directory, "accomplishments"), "w") as f:
+            f.write("")
 
         clear()
 

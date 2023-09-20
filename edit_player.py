@@ -117,13 +117,90 @@ def change_player_status():
   return 
 
 def add_game():
-  pass
+  clear()
+  print("Welcome to the add game section\n")
 
 def add_accomplishment():
-  pass
+  clear()
+  print("Welcome to the add accomplishements status\n")
+  print("Here are all your current accomplishments registered\n")
+  x = -1
+  with open(active_career_file, "r") as f:
+    x = f.readlines()[0].strip()
+  career_directory = os.path.join(base_directory, f"career{x}")
+
+  current_accomplishments = []
+  with open(os.path.join(career_directory, "accomplishments"), "r") as f:
+    current_accomplishments = f.readlines()
+    print("".join(current_accomplishments))
+
+  while True:
+    x = input("What is the new accomplishement you want to register? (sesason:trophy) (EXIT to leave) ")
+
+    if x.upper() == "EXIT":
+      with open(os.path.join(career_directory, "accomplishments"), "w") as f:
+        for x in current_accomplishments:
+          f.write(x)
+      return
+
+    current_accomplishments.append(x.strip() + "\n")
+
 
 def add_season():
-  pass
+  clear()
+  print("Welcome to the add seasons status\n")
+  print("Here are all your current seasons registered:")
+  x = -1
+  with open(active_career_file, "r") as f:
+    x = f.readlines()[0].strip()
+  career_directory = os.path.join(base_directory, f"career{x}")
+
+  current_seasons = []
+  with open(os.path.join(career_directory, "seasons"), "r") as f:
+    current_seasons = f.readlines()
+    print("".join(current_seasons))
+
+  while True:
+    x = input("What is the new season you want to register? (EXIT to leave) ")
+
+    if x.upper() == "EXIT":
+
+      with open(os.path.join(career_directory, "seasons"), "w") as f:
+        for x in current_seasons:
+          f.write(x)
+
+      return
+
+    current_seasons.append(x.strip() + "\n")
 
 def add_competition():
-  pass
+
+  clear()
+  print("Welcome to the add competitions status\n")
+
+  print("Here are all your current competitions registered:")
+
+  x = -1
+  with open(active_career_file, "r") as f:
+    x = f.readlines()[0].strip()
+  career_directory = os.path.join(base_directory, f"career{x}")
+
+  current_competitions = []
+  with open(os.path.join(career_directory, "competitions"), "r") as f:
+    current_competitions = f.readlines()
+    print("".join(current_competitions))
+
+  while True:
+    x = input("What is the new competition you want to register? (EXIT to leave) ")
+
+    if x.upper() == "EXIT":
+
+      with open(os.path.join(career_directory, "competitions"), "w") as f:
+        for x in current_competitions:
+          f.write(x)
+
+      return
+
+    current_competitions.append(x.strip() + "\n")
+    
+
