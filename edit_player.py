@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+global defensive_positions, offensive_positions
+defensive_positions = ["GB", "LB", "RB", "CB", "LWB", "RWB", "CDM"]
+offensive_positions = ["CM", "CAM", "LM", "LW", "RM", "RW", "CF", "ST"]
+
 import time 
 import sys, os, glob, subprocess, re
 from utilities import clear, base_directory, active_career_file, get_career_directory, get_competitions, get_players, get_accomplishments, get_seasons
@@ -41,7 +45,7 @@ def add_player():
     f.write(f"STATUS: ACTIVE\n")
 
 
-  print("Player succesfully logged to the database")
+  print("Player successfully logged to the database")
   return
 
 def change_player_status():
@@ -56,7 +60,7 @@ def change_player_status():
   print(', '.join(players))
 
   answer = input("Type the name of one of the above players? ")
-  while  answer.strip() not in files:
+  while  answer.strip() not in players:
     print("Invalid name, try again.")
     answer = input("Type the name of one of the above players? ")
 
@@ -105,26 +109,81 @@ def add_game():
   print("Welcome to the add game section\n")
 
   seasons = ", ".join([x.strip() for x in get_seasons()])
-  season_selection = input(f"Select seasons: {seasons}\n\t-> ")
+  season_selection = input(f"Select season: {seasons}\n\t-> ")
 
   competition = ", ".join([x.strip() for x in get_competitions()])
   competition_selection = input(f"Select competition: {competition}\n\t-> ")
 
   opponent = input("Select opponent:\n\t-> ")
   home_or_away = input("H or A:\n\t-> ")
+  status = input("Game Status: Win, Draw or Loss\n\t-> ")
+  our_goals = input("Number of goals scored\n\t-> ")
+  their_goals = input("Number of goals conceded\n\t-> ")
+  dribbles_rate = input("Dribble success rate\n\t-> ")
+  pass_rate = input("Pass success rate\n\t-> ")
+  shot_rate = input("Shot success rate\n\t-> ")
 
+  players = ", ".join(get_players())
+  valid_players = input(f"""These are the available players\n\t-> {players}\n\t-> If any of the players in this game 
+  aren't in the list, type Y to exit. Press any other key to continue: """)
 
+  if valid_players.strip().upper() == "Y": return
+  playerData = []
+  for i in range(11):
+    name = input(f"Player no. {i}:\n\t-> Surname? ")
+    position = input(f"\t-> Position? ")
+    match_rating = input(f"\t-> Rating? ")
+    passes = input(f"\t-> Passes? ")
+    tackles_won = input(f"\t-> Tackles Won? ")
+    interceptions = input(f"\t-> Interceptions? ")
+
+    if position.strip() in defensive_positions:
+      clean_sheet = input(f"\t-> Clean Sheet? (Y/N) ")
+
+      playerData.append({
+        name, position, match_rating, passes, tackles_won, interceptions, clean_sheet
+      })
+
+    if position.strip() in offensive_positions:
+      dribbles = input(f"\t-> Dribbles? ")
+      shots = input(f"\t-> Shots? ")
+      goals = input(f"\t-> Goals? ")
+
+      playerData.append({
+        name, position, match_rating, passes, tackles_won, interceptions, shots, goals, dribbles
+      })
+
+    playerData.append({
+      name, position, match_rating, passes, tackles_won, interceptions
+    })
+
+  print(f'data is {playerData}')
+  goals = input(f"\t-> Pending Input? ")
+
+  seasons_directory = os.path.join(get_career_directory(), "seasons")
+  current_season = os.path.join(seasons_directory, season_selection.strip().split("/")[1])
+
+  fresh_competition = competition_selection.strip().upper()
+  counter = len([x for x in os.listdir(current_season) if re.search(fr"^{fresh_competition}", x)]) + 1
+
+  title=f"{fresh_competition}:{counter}"
+  new_file = os.pash.join(current_season, title)
   
+  with open(new_file, "w") as f:
+    f.write("BOB")
+
+
+
 
 def add_accomplishment():
   clear()
-  print("Welcome to the add accomplishements status\n")
+  print("Welcome to the add accomplishment status\n")
   print("Here are all your current accomplishments registered\n")
   current_accomplishments = get_accomplishments()
   print("".join(current_accomplishments))
 
   while True:
-    x = input("What is the new accomplishement you want to register? (sesason:trophy) (EXIT to leave) ")
+    x = input("What is the new accomplishment you want to register? (season:trophy) (EXIT to leave) ")
 
     if x.upper() == "EXIT":
       with open(os.path.join(get_career_directory(), "accomplishments"), "w") as f:
@@ -143,17 +202,26 @@ def add_season():
   current_seasons = get_seasons()
   print("".join(current_seasons))
 
+  added = False
   while True:
     x = input("What is the new season you want to register? (EXIT to leave) ")
 
     if x.upper() == "EXIT":
 
+      if not added: return
+
       with open(os.path.join(get_career_directory(), "seasons"), "w") as f:
         for x in current_seasons:
           f.write(x)
 
+      seasons_directory = os.path.join(get_career_directory(), "seasons")
+      for x in current_seasons:
+        new_season = os.path.join(seasons_directory, x.strip())
+        subprocess.run(["mkdir", new_season], check=True)
+
       return
 
+    added = True
     current_seasons.append(x.strip() + "\n")
 
 def add_competition():

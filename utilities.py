@@ -43,7 +43,7 @@ def get_competitions():
 	return current_competitions
 
 def get_accomplishments():
-	with open(os.path.join(get_career_directory(), "accomplishements"), "r") as f:
+	with open(os.path.join(get_career_directory(), "accomplishments"), "r") as f:
 		accomplishments = f.readlines()
 
 	return accomplishments
@@ -53,6 +53,6 @@ def get_players():
   return [f for f in os.listdir(career_directory) if os.path.isfile(os.path.join(career_directory, f))] 
 
 def get_seasons():
-	with open(os.path.join(get_career_directory(), "seasons"), "r") as f:
+	with open(os.path.join(get_career_directory(), "availableSeasons"), "r") as f:
 		current_seasons = f.readlines()
 	return current_seasons

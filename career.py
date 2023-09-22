@@ -23,6 +23,10 @@ def create_new_career():
         subprocess.run(["mkdir", career_directory], check=True)
         players_directory = os.path.join(career_directory, "players")
         subprocess.run(["mkdir", players_directory], check=True)
+        seasons_directory = os.path.join(career_directory, "seasons")
+        subprocess.run(["mkdir", seasons_directory], check=True)
+        first_season = os.path.join(seasons_directory, league_season.strip().split("/")[1])
+        subprocess.run(["mkdir", first_season], check=True)
         subprocess.run(["touch", os.path.join(career_directory, "keyInfo")], check=True)
 
         with open(count_file, "w") as f:
@@ -38,7 +42,7 @@ def create_new_career():
         with open(os.path.join(career_directory, "competitions"), "w") as f:
             f.write(f"{league_career.strip()}\n")
 
-        with open(os.path.join(career_directory, "seasons"), "w") as f:
+        with open(os.path.join(career_directory, "availableSeasons"), "w") as f:
             f.write(f"{league_season.strip()}\n")
 
         with open(os.path.join(career_directory, "accomplishments"), "w") as f:
