@@ -129,36 +129,36 @@ def add_game():
 
   if valid_players.strip().upper() == "Y": return
   playerData = []
-  for i in range(11):
-    name = input(f"Player no. {i}:\n\t-> Surname? ")
-    position = input(f"\t-> Position? ")
-    match_rating = input(f"\t-> Rating? ")
-    passes = input(f"\t-> Passes? ")
-    tackles_won = input(f"\t-> Tackles Won? ")
-    interceptions = input(f"\t-> Interceptions? ")
+  for i in range(3):
+    name = input(f"Player no. {i}:\n\t-> Surname? ").strip()
+    position = input(f"\t-> Position? ").strip()
+    match_rating = input(f"\t-> Rating? ").strip()
+    passes = input(f"\t-> Passes? ").strip()
+    tackles_won = input(f"\t-> Tackles Won? ").strip()
+    interceptions = input(f"\t-> Interceptions? ").strip()
+    playerDataTemp = {
+      "NAME": name,
+      "POSITION": position,
+      "MATCH_RATING": match_rating,
+      "PASSES": passes,
+      "TACKLES_WON": tackles_won,
+      "INTERCEPTIONS": interceptions
+    }
 
     if position.strip() in defensive_positions:
-      clean_sheet = input(f"\t-> Clean Sheet? (Y/N) ")
-
-      playerData.append({
-        name, position, match_rating, passes, tackles_won, interceptions, clean_sheet
-      })
+      clean_sheet = input(f"\t-> Clean Sheet? (Y/N) ").strip()
+      playerDataTemp["CLEAN_SHEET"] = clean_sheet
 
     if position.strip() in offensive_positions:
-      dribbles = input(f"\t-> Dribbles? ")
-      shots = input(f"\t-> Shots? ")
-      goals = input(f"\t-> Goals? ")
+      dribbles = input(f"\t-> Dribbles? ").strip()
+      shots = input(f"\t-> Shots? ").strip()
+      goals = input(f"\t-> Goals? ").strip()
+      playerDataTemp["DRIBBLES"] = dribbles
+      playerDataTemp["SHOTS"] = shots
+      playerDataTemp["GOALS"] = goals
 
-      playerData.append({
-        name, position, match_rating, passes, tackles_won, interceptions, shots, goals, dribbles
-      })
+    playerData.append(playerDataTemp)
 
-    playerData.append({
-      name, position, match_rating, passes, tackles_won, interceptions
-    })
-
-  print(f'data is {playerData}')
-  goals = input(f"\t-> Pending Input? ")
 
   seasons_directory = os.path.join(get_career_directory(), "seasons")
   current_season = os.path.join(seasons_directory, season_selection.strip().split("/")[1])
@@ -167,10 +167,30 @@ def add_game():
   counter = len([x for x in os.listdir(current_season) if re.search(fr"^{fresh_competition}", x)]) + 1
 
   title=f"{fresh_competition}:{counter}"
-  new_file = os.pash.join(current_season, title)
+  new_file = os.path.join(current_season, title)
   
-  with open(new_file, "w") as f:
-    f.write("BOB")
+  try:
+    with open(new_file, "w") as f:
+      f.write(f"OPPONENT: {opponent}\n")
+      f.write(f"LOCATION: {home_or_away}\n")
+      f.write(f"STATUS: {status}\n")
+      f.write(f"GOALS SCORED: {our_goals}\n")
+      f.write(f"GOALS CONCEDED: {their_goals}\n")
+      f.write(f"DRIBBLE SUCCESS RATE: {dribbles_rate}\n")
+      f.write(f"PASS SUCCESS RATE: {pass_rate}\n")
+      f.write(f"SHOOTING SUCCESS RATE: {shot_rate}\n")
+
+      for entries in playerData:
+        string = "|".join([f"{key.upper()}={value.upper()}" for key, value in entries.items()])
+        f.write(string + "\n")
+
+    clear()
+    print("Game successfully added :)")
+    return
+
+  except Exception as e:
+    print(f"Something went wrong with the adding game: {e}")
+    return
 
 
 
@@ -207,7 +227,6 @@ def add_season():
     x = input("What is the new season you want to register? (EXIT to leave) ")
 
     if x.upper() == "EXIT":
-
       if not added: return
 
       with open(os.path.join(get_career_directory(), "seasons"), "w") as f:
