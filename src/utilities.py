@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, os, glob, subprocess, re
-
+import os
 
 global base_directory, count_file, active_career_file
 base_directory = os.path.expanduser("~/.fifacareer")

@@ -6,7 +6,7 @@ offensive_positions = ["CM", "CAM", "LM", "LW", "RM", "RW", "CF", "ST"]
 
 import time 
 import sys, os, glob, subprocess, re
-from utilities import clear, base_directory, active_career_file, get_career_directory, get_competitions, get_players, get_accomplishments, get_seasons
+from src.utilities import clear, base_directory, active_career_file, get_career_directory, get_competitions, get_players, get_accomplishments, get_seasons
 
 def add_player():
   clear()
