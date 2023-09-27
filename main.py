@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, os, glob, subprocess, re
+import sys, os, subprocess, re
 
 from src.utilities import clear, num_active_careers, print_careers, base_directory, count_file, active_career_file
 from src.edit_career import add_accomplishment, add_game, add_player, add_season, change_player_status, add_competition
