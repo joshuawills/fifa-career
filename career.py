@@ -3,7 +3,7 @@
 import sys, os, glob, subprocess, re
 
 from utilities import clear, num_active_careers, print_careers, base_directory, count_file, active_career_file
-from edit_player import add_accomplishment, add_game, add_player, add_season, change_player_status, add_competition
+from src.edit_career import add_accomplishment, add_game, add_player, add_season, change_player_status, add_competition
 
 def create_new_career():
 
@@ -214,7 +214,6 @@ def main():
     string += "\n\t"
 
     while True:
-
         active_file = ""
         with open(active_career_file, "r") as f:
             active_file_number = f.readlines()
@@ -233,25 +232,18 @@ def main():
             continue
             
         clear()
-        if answer == 1:
-            create_new_career()
-        elif answer == 2:
-            delete_old_career()
-        elif answer == 3:
-            edit_existing_career()
-        elif answer == 4:
-            list_all_careers()
-        elif answer == 5:
-            view_career()
-        elif answer == 6:
-            set_active_career()
-        elif answer == 7:
+        match answer:
+          case 1: create_new_career()
+          case 2: delete_old_career()
+          case 3: edit_existing_career()
+          case 4: list_all_careers()
+          case 5: view_career() ## TO DO
+          case 6: set_active_career()
+          case 7:
             clear()
             print("Gracefully exiting program")
             sys.exit(0)
-
-            
-        
+          case _: pass
 
 if __name__ == "__main__":
     main()
