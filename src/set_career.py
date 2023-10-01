@@ -35,5 +35,5 @@ def set_active_career():
         f.write(answer)
 
     clear()
-    print(f"Successfully set active career to '{answer}'\n")
+    print(f"NEW ACTIVE CAREER: '{answer}'\n")
     return
